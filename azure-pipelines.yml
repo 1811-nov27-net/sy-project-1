@@ -13,15 +13,20 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: 
-    cd PizzaStoreWebApp
-    dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
-- script: 
-    cd PizzaStoreWebApp
-    dotnet test --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
-- script: 
-    cd PizzaStoreWebApp
-    dotnet publish PizzaStoreWebApp --configuration $(buildConfiguration) -o ../publish
-  displayName: 'dotnet build $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: build
+    projects: PizzaStoreWebApp
+  displayName: dotnet build
+- task: DotNetCoreCLI@2
+  inputs:
+    command: test
+    projects: PizzaStoreWebApp
+    publishTestResults: true
+  displayName: dotnet test
+- task: DotNetCoreCLI@2
+  inputs:
+    command: publish
+    projects: PizzaStoreWebApp/PizzaStoreWebApp
+    publishWebProjects: false
+  displayName: dotnet publish
